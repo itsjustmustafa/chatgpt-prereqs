@@ -17,7 +17,7 @@ async function searchCourses(subject) {
   return results;
 }
 
-function displayResults(results) {
+async function displayResults(results) {
   const resultsContainer = document.getElementById('results');
   resultsContainer.innerHTML = '';
   if (results.length === 0) {
