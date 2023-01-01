@@ -48,8 +48,8 @@ function displayResults(results) {
   }
 }
 
-function getSubjectName(code) {
-  const courses = getCourses();
+async function getSubjectName(code) {
+  const courses = await getCourses();
   const subject = courses.find(course => course.code === code);
   return subject ? subject.name : code;
 }
