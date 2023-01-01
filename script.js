@@ -70,7 +70,7 @@ async function displayResults() {
 }
 
 async function querySubject() {
-  const input = document.getElementById('subject-code');
+  const input = document.getElementById('subject-query');
   const code = input.value;
   input.value = '';
   window.location.href = `${window.location.pathname}?code=${code}`;
