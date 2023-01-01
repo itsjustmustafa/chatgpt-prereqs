@@ -32,10 +32,9 @@ async function displayResults(results) {
           <th>Postrequisites</th>
         </tr>
     `;
-    results.forEach(async result => {
-      const prereqs = await result.preReq.map(async code => await getSubjectName(code)).join(', ');
-      const postreqs = await result.postReq.map(async code => await getSubjectName(code)).join(', ');
-	  console.log("prereqs: " + prereqs + ", postreqs: " + postreqs);
+    for (const result of results) {
+      const prereqs = (await Promise.all(result.preReq.map(getSubjectName))).join(', ');
+      const postreqs = (await Promise.all(result.postReq.map(getSubjectName))).join(', ');
       resultsContainer.innerHTML += `
         <tr>
           <td>${result.name}</td>
@@ -44,11 +43,10 @@ async function displayResults(results) {
           <td>${postreqs}</td>
         </tr>
       `;
-    });
+    }
     resultsContainer.innerHTML += '</table>';
   }
 }
-
 
 async function getSubjectName(code) {
   const courses = await getCourses();
