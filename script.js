@@ -1,7 +1,9 @@
 async function getSubjectName(code) {
   const courses = await fetchCourses();
   const subject = courses.find((subject) => subject.code === code);
-  return subject.name || null;
+  if(subject){
+	return subject.name
+  }
 }
 
 async function searchCourses(query) {
