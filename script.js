@@ -33,8 +33,12 @@ function displayResults(results) {
         </tr>
     `;
     results.forEach(result => {
-      const prereqs = result.preReq.map(code => getSubjectName(code)).join(', ');
-      const postreqs = result.postReq.map(code => getSubjectName(code)).join(', ');
+      const prereqs = result.preReq.map(code => {
+        getSubjectName(code).then(name => name);
+      }).join(', ');
+      const postreqs = result.postReq.map(code => {
+        getSubjectName(code).then(name => name);
+      }).join(', ');
       resultsContainer.innerHTML += `
         <tr>
           <td>${result.name}</td>
