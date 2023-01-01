@@ -23,18 +23,37 @@ function displayResults(results) {
   if (results.length === 0) {
     resultsContainer.innerHTML = '<p>No results found.</p>';
   } else {
+    resultsContainer.innerHTML = `
+      <table>
+        <tr>
+          <th>Subject</th>
+          <th>Code</th>
+          <th>Prerequisites</th>
+          <th>Postrequisites</th>
+        </tr>
+    `;
     results.forEach(result => {
-      const prereqs = result.preReq.join(', ');
-      const postreqs = result.postReq.join(', ');
+      const prereqs = result.preReq.map(code => getSubjectName(code)).join(', ');
+      const postreqs = result.postReq.map(code => getSubjectName(code)).join(', ');
       resultsContainer.innerHTML += `
-        <h2>${result.name}</h2>
-        <p>Code: ${result.code}</p>
-        <p>Prerequisites: ${prereqs}</p>
-        <p>Postrequisites: ${postreqs}</p>
+        <tr>
+          <td>${result.name}</td>
+          <td>${result.code}</td>
+          <td>${prereqs}</td>
+          <td>${postreqs}</td>
+        </tr>
       `;
     });
+    resultsContainer.innerHTML += '</table>';
   }
 }
+
+function getSubjectName(code) {
+  const courses = getCourses();
+  const subject = courses.find(course => course.code === code);
+  return subject ? subject.name : code;
+}
+
 
 document.getElementById('course-form').addEventListener('submit', event => {
   event.preventDefault();
