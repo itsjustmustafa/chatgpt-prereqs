@@ -1,6 +1,9 @@
 async function getSubjectName(code) {
   const courses = await fetchCourses();
   const subject = courses.find((subject) => subject.code === code);
+  if(subject === undefined){
+	  console.log("Undefined for code = " + code);
+  }
   return subject.name;
 }
 
