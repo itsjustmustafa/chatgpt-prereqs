@@ -32,7 +32,15 @@ async function displayResults(results) {
       <th>Postrequisites</th>
     `;
     table.appendChild(headerRow);
-    for (const result of results) {
+    const loadingMessage = document.createElement('p');
+    loadingMessage.textContent = 'Loading results...';
+    resultsContainer.appendChild(loadingMessage);
+    const progressBar = document.createElement('progress');
+    progressBar.max = results.length;
+    progressBar.value = 0;
+    resultsContainer.appendChild(progressBar);
+    for (let i = 0; i < results.length; i++) {
+      const result = results[i];
       const prereqs = (await Promise.all(result.preReq.map(getSubjectName))).join(', ');
       const postreqs = (await Promise.all(result.postReq.map(getSubjectName))).join(', ');
       const row = document.createElement('tr');
@@ -43,10 +51,14 @@ async function displayResults(results) {
         <td>${postreqs}</td>
       `;
       table.appendChild(row);
+      progressBar.value = i + 1;
     }
+    resultsContainer.removeChild(loadingMessage);
+    resultsContainer.removeChild(progressBar);
     resultsContainer.appendChild(table);
   }
 }
+
 
 async function getSubjectName(code) {
   const courses = await getCourses();
