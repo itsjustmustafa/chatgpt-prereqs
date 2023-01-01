@@ -20,6 +20,8 @@ async function displayResults() {
   const queryParams = new URLSearchParams(location.search);
   const code = queryParams.get('code');
   if (code) {
+	const input = document.getElementById('subject-query');
+	input.value = code;
     const subjects = await searchCourses(code);
     const resultsContainer = document.getElementById('results');
     resultsContainer.innerHTML = '';
@@ -48,7 +50,7 @@ async function displayResults() {
         const prereqLinks = (await Promise.all(subject.preReq.map(async (code) => {
           const name = await getSubjectName(code);
 		  if (name){
-			return `<li><a href="#" onclick="querySubject('${code}')">${name} - ${code}</a></li>`;
+			return `<li><a href="${window.location.pathname}?code=${code}">${name} - ${code}</a></li>`;
 		  } else{
 			  return "";
 		  };
@@ -56,7 +58,7 @@ async function displayResults() {
         const postreqLinks = (await Promise.all(subject.postReq.map(async (code) => {
           const name = await getSubjectName(code);
 		  if (name){
-			return `<li><a href="#" onclick="querySubject('${code}')">${name} - ${code}</a></li>`;
+			return `<li><a href="${window.location.pathname}?code=${code}">${name} - ${code}</a></li>`;
 		  } else{
 			  return "";
 		  }
@@ -81,8 +83,11 @@ async function displayResults() {
 
 async function querySubject(code) {
   const input = document.getElementById('subject-query');
-  code = code || input.value
-  input.value = '';
+  if(!code){
+	  code = input.value;
+  }else{ 
+	input.value = code;
+  }
   window.location.href = `${window.location.pathname}?code=${code}`;
 }
 
