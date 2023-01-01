@@ -17,44 +17,47 @@ async function searchCourses(subject) {
   return results;
 }
 
-async function displayResults(results) {
+async function displayResults(subjects) {
   const resultsContainer = document.getElementById('results');
   resultsContainer.innerHTML = '';
-  if (results.length === 0) {
+  if (subjects.length === 0) {
     resultsContainer.innerHTML = '<p>No results found.</p>';
   } else {
     const table = document.createElement('table');
     const headerRow = document.createElement('tr');
     headerRow.innerHTML = `
-      <th>Subject</th>
-      <th>Code</th>
+      <th></th>
       <th>Prerequisites</th>
+      <th>Subject</th>
       <th>Postrequisites</th>
+      <th></th>
     `;
     table.appendChild(headerRow);
     const loadingMessage = document.createElement('p');
     loadingMessage.textContent = 'Loading results...';
     resultsContainer.appendChild(loadingMessage);
     const progressBar = document.createElement('progress');
-    progressBar.max = results.length;
+    progressBar.max = subjects.length;
     progressBar.value = 0;
     resultsContainer.appendChild(progressBar);
-    for (let i = 0; i < results.length; i++) {
-      const result = results[i];
-      const prereqLinks = (await Promise.all(result.preReq.map(async (code) => {
-        const subject = await getSubjectName(code);
-        return `<a href="#" onclick="querySubject('${code}')">${subject}</a>`;
-      }))).join(', ');
-      const postreqLinks = (await Promise.all(result.postReq.map(async (code) => {
-        const subject = await getSubjectName(code);
-        return `<a href="#" onclick="querySubject('${code}')">${subject}</a>`;
-      }))).join(', ');
+    for (let i = 0; i < subjects.length; i++) {
+      const subject = subjects[i];
+      const prereqLinks = (await Promise.all(subject.preReq.map(async (code) => {
+        const name = await getSubjectName(code);
+        return `<li><a href="#" onclick="querySubject('${code}')">${name} - ${code}</a></li>`;
+      }))).join('');
+      const postreqLinks = (await Promise.all(subject.postReq.map(async (code) => {
+        const name = await getSubjectName(code);
+        return `<li><a href="#" onclick="querySubject('${code}')">${name} - ${code}</a></li>`;
+      }))).join('');
       const row = document.createElement('tr');
       row.innerHTML = `
-        <td>${result.name}</td>
-        <td>${result.code}</td>
-        <td>${prereqLinks}</td>
-        <td>${postreqLinks}</td>
+        <td></td>
+        <td><ul>${prereqLinks}</ul></td>
+        <td>${subject.name} - ${subject.code}</td>
+        <td><ul>${postreqLinks}</ul></td>
+        <td></
+        <td></td>
       `;
       table.appendChild(row);
       progressBar.value = i + 1;
@@ -64,6 +67,7 @@ async function displayResults(results) {
     resultsContainer.appendChild(table);
   }
 }
+
 
 async function querySubject(code) {
   searchCourses(code).then(displayResults);
