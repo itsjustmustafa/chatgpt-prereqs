@@ -23,28 +23,28 @@ async function displayResults(results) {
   if (results.length === 0) {
     resultsContainer.innerHTML = '<p>No results found.</p>';
   } else {
-    resultsContainer.innerHTML = `
-      <table>
-        <tr>
-          <th>Subject</th>
-          <th>Code</th>
-          <th>Prerequisites</th>
-          <th>Postrequisites</th>
-        </tr>
+    const table = document.createElement('table');
+    const headerRow = document.createElement('tr');
+    headerRow.innerHTML = `
+      <th>Subject</th>
+      <th>Code</th>
+      <th>Prerequisites</th>
+      <th>Postrequisites</th>
     `;
+    table.appendChild(headerRow);
     for (const result of results) {
       const prereqs = (await Promise.all(result.preReq.map(getSubjectName))).join(', ');
       const postreqs = (await Promise.all(result.postReq.map(getSubjectName))).join(', ');
-      resultsContainer.innerHTML += `
-        <tr>
-          <td>${result.name}</td>
-          <td>${result.code}</td>
-          <td>${prereqs}</td>
-          <td>${postreqs}</td>
-        </tr>
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${result.name}</td>
+        <td>${result.code}</td>
+        <td>${prereqs}</td>
+        <td>${postreqs}</td>
       `;
+      table.appendChild(row);
     }
-    resultsContainer.innerHTML += '</table>';
+    resultsContainer.appendChild(table);
   }
 }
 
