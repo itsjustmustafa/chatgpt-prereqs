@@ -17,7 +17,7 @@ async function searchCourses(subject) {
   return results;
 }
 
-function displayResults(results) {
+async function displayResults(results) {
   const resultsContainer = document.getElementById('results');
   resultsContainer.innerHTML = '';
   if (results.length === 0) {
@@ -33,8 +33,8 @@ function displayResults(results) {
         </tr>
     `;
     results.forEach(result => {
-      const prereqs = result.preReq.map(code => getSubjectName(code)).join(', ');
-      const postreqs = result.postReq.map(code => getSubjectName(code)).join(', ');
+      const prereqs = result.preReq.map(code => await getSubjectName(code)).join(', ');
+      const postreqs = result.postReq.map(code => await getSubjectName(code)).join(', ');
       resultsContainer.innerHTML += `
         <tr>
           <td>${result.name}</td>
@@ -59,6 +59,6 @@ document.getElementById('course-form').addEventListener('submit', event => {
   event.preventDefault();
   const subject = document.getElementById('subject').value;
   searchCourses(subject).then(results => {
-    displayResults(results);
+    await displayResults(results);
   });
 });
