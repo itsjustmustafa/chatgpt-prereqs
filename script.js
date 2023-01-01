@@ -35,6 +35,7 @@ async function displayResults(results) {
     results.forEach(async result => {
       const prereqs = await result.preReq.map(async code => await getSubjectName(code)).join(', ');
       const postreqs = await result.postReq.map(async code => await getSubjectName(code)).join(', ');
+	  console.log("prereqs: " + prereqs + ", postreqs: " + postreqs);
       resultsContainer.innerHTML += `
         <tr>
           <td>${result.name}</td>
