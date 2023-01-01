@@ -32,13 +32,9 @@ async function displayResults(results) {
           <th>Postrequisites</th>
         </tr>
     `;
-    results.forEach(result => {
-      const prereqs = result.preReq.map(code => {
-        await getSubjectName(code);
-      }).join(', ');
-      const postreqs = result.postReq.map(code => {
-        await getSubjectName(code);
-      }).join(', ');
+    results.forEach(async result => {
+      const prereqs = await result.preReq.map(async code => await getSubjectName(code)).join(', ');
+      const postreqs = await result.postReq.map(async code => await getSubjectName(code)).join(', ');
       resultsContainer.innerHTML += `
         <tr>
           <td>${result.name}</td>
@@ -51,6 +47,7 @@ async function displayResults(results) {
     resultsContainer.innerHTML += '</table>';
   }
 }
+
 
 async function getSubjectName(code) {
   const courses = await getCourses();
