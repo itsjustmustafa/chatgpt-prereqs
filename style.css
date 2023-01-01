@@ -19,6 +19,12 @@ form {
   align-items: center;
 }
 
+@media only screen and (max-width: 600px) {
+  form, #results {
+    width: 100%;
+  }
+}
+
 label, input[type="text"], input[type="submit"] {
   width: 100%;
   max-width: 300px;
