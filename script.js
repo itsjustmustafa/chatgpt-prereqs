@@ -79,9 +79,9 @@ async function displayResults() {
   }
 }
 
-async function querySubject() {
+async function querySubject(code) {
   const input = document.getElementById('subject-query');
-  const code = input.value;
+  code = code || input.value
   input.value = '';
   window.location.href = `${window.location.pathname}?code=${code}`;
 }
