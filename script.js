@@ -41,14 +41,20 @@ async function displayResults(results) {
     resultsContainer.appendChild(progressBar);
     for (let i = 0; i < results.length; i++) {
       const result = results[i];
-      const prereqs = (await Promise.all(result.preReq.map(getSubjectName))).join(', ');
-      const postreqs = (await Promise.all(result.postReq.map(getSubjectName))).join(', ');
+      const prereqLinks = (await Promise.all(result.preReq.map(async (code) => {
+        const subject = await getSubjectName(code);
+        return `<a href="#" onclick="querySubject('${code}')">${subject}</a>`;
+      }))).join(', ');
+      const postreqLinks = (await Promise.all(result.postReq.map(async (code) => {
+        const subject = await getSubjectName(code);
+        return `<a href="#" onclick="querySubject('${code}')">${subject}</a>`;
+      }))).join(', ');
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>${result.name}</td>
         <td>${result.code}</td>
-        <td>${prereqs}</td>
-        <td>${postreqs}</td>
+        <td>${prereqLinks}</td>
+        <td>${postreqLinks}</td>
       `;
       table.appendChild(row);
       progressBar.value = i + 1;
@@ -58,6 +64,7 @@ async function displayResults(results) {
     resultsContainer.appendChild(table);
   }
 }
+
 
 
 async function getSubjectName(code) {
