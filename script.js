@@ -34,10 +34,10 @@ function displayResults(results) {
     `;
     results.forEach(result => {
       const prereqs = result.preReq.map(code => {
-        getSubjectName(code).then(name => name);
+        await getSubjectName(code);
       }).join(', ');
       const postreqs = result.postReq.map(code => {
-        getSubjectName(code).then(name => name);
+        await getSubjectName(code);
       }).join(', ');
       resultsContainer.innerHTML += `
         <tr>
