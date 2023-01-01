@@ -65,14 +65,15 @@ async function displayResults(results) {
   }
 }
 
-
+async function querySubject(code) {
+  searchCourses(code).then(displayResults);
+}
 
 async function getSubjectName(code) {
   const courses = await getCourses();
   const subject = courses.find(course => course.code === code);
   return subject ? subject.name : code;
 }
-
 
 document.getElementById('course-form').addEventListener('submit', event => {
   event.preventDefault();
