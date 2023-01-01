@@ -1,10 +1,7 @@
 async function getSubjectName(code) {
   const courses = await fetchCourses();
   const subject = courses.find((subject) => subject.code === code);
-  if(subject === undefined){
-	  console.log("Undefined for code = " + code);
-  }
-  return subject.name;
+  return subject.name || null;
 }
 
 async function searchCourses(query) {
@@ -48,11 +45,19 @@ async function displayResults() {
         const subject = subjects[i];
         const prereqLinks = (await Promise.all(subject.preReq.map(async (code) => {
           const name = await getSubjectName(code);
-          return `<li><a href="#" onclick="querySubject('${code}')">${name} - ${code}</a></li>`;
+		  if (name){
+			return `<li><a href="#" onclick="querySubject('${code}')">${name} - ${code}</a></li>`;
+		  } else{
+			  return "";
+		  };
         }))).join('');
         const postreqLinks = (await Promise.all(subject.postReq.map(async (code) => {
           const name = await getSubjectName(code);
-          return `<li><a href="#" onclick="querySubject('${code}')">${name} - ${code}</a></li>`;
+		  if (name){
+			return `<li><a href="#" onclick="querySubject('${code}')">${name} - ${code}</a></li>`;
+		  } else{
+			  return "";
+		  }
         }))).join('');
         const row = document.createElement('tr');
         row.innerHTML = `
